@@ -127,3 +127,28 @@ def report(database):
         }
     finally:
         connection.close()
+
+
+def export_csv(database):
+    from io import StringIO
+
+    output = StringIO(newline="")
+    fields = [
+        "reference",
+        "currency",
+        "invoiced_minor",
+        "settled_minor",
+        "difference_minor",
+        "status",
+    ]
+    writer = csv.DictWriter(output, fieldnames=fields)
+    writer.writeheader()
+    for original in report(database)["groups"]:
+        row = dict(original)
+        text = row["reference"]
+        if text.lstrip().startswith(("=", "+", "-", "@")) or text.startswith(
+            ("\t", "\r", "\n")
+        ):
+            row["reference"] = "'" + text
+        writer.writerow(row)
+    return output.getvalue()

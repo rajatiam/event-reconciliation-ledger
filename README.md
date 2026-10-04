@@ -36,3 +36,13 @@ Business algorithms live in `event_reconciliation_ledger/core.py`; `event_reconc
 Currency minor units are explicit. Repeated identical event IDs are idempotent; conflicting IDs roll back the batch. Settlements may split across events; reconciliation groups by reference and currency. No bank connection is made.
 
 This project demonstrates implemented engineering practices. It does not claim production deployment history or external certifications.
+
+## Spreadsheet-safe reconciliation exports
+
+Export settlement reconciliation as CSV, with formula-like reference values neutralized before spreadsheet use. Currency groups and exact integer minor units are preserved.
+
+```sh
+python -m event_reconciliation_ledger report examples/ledger.db --format csv
+```
+
+Create the named input snapshots, databases or plan files first using the existing commands above.
